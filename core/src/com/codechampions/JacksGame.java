@@ -10,45 +10,48 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Timer;
 
 public class JacksGame implements ApplicationListener {
 	SpriteBatch batch;
-	BitmapFont font;
 	Texture texture;
 	Sprite sprite;
 	Pixmap pixmap;
+	TextureAtlas textureAtlas;
+	int currentFrame = 1;
+	String currentAtlasKey = new String("0001");
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-
-		//Create a Pixmap that is 256x128 using 8 bytes for R, G, B, and A
-		pixmap = new Pixmap(256, 128, Pixmap.Format.RGBA8888);
-
-		//Fill pixmap red
-		pixmap.setColor(Color.RED);
-		pixmap.fill();
-
-		//Draw 2 lines forming an X
-		pixmap.setColor(Color.BLACK);
-		pixmap.drawLine(0, 0, pixmap.getWidth()-1, pixmap.getHeight()-1);
-		pixmap.drawLine(0, pixmap.getHeight()-1, pixmap.getWidth()-1, 0);
-
-		//Draw a circle about the middle
-		pixmap.setColor(Color.YELLOW);
-		pixmap.drawCircle(pixmap.getWidth()/2, pixmap.getHeight()/2, pixmap.getHeight()/2-1);
-
-		texture = new Texture(pixmap);
-		//Since we have passed the pixmap to texture, we can dispose of pixmap
-		pixmap.dispose();
-
-		sprite = new Sprite(texture);
-	}
+		textureAtlas = new TextureAtlas(Gdx.files.internal("assets/images/spritesheet.atlas"));
+		TextureAtlas.AtlasRegion region = textureAtlas.findRegion("0001");
+		sprite = new Sprite(region);
+		sprite.setPosition(120, 100);
+		sprite.scale(2.5f);
+		Timer.schedule(new Timer.Task() {
+			@Override
+			public void run() {
+				currentFrame++;
+				if(currentFrame > 20)
+					currentFrame = 1;
+				String base = new String();
+						if(currentFrame >= 10)
+							base = "00";
+						else
+							base = "000";
+				currentAtlasKey = base + currentFrame;
+				sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
+			}
+		}
+		,0,1/30.0f);
+			}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
-		texture.dispose();
+		textureAtlas.dispose();
 	}
 
 	@Override
@@ -57,10 +60,6 @@ public class JacksGame implements ApplicationListener {
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
 		batch.begin();
-		sprite.setPosition(0, 0);
-		sprite.draw(batch);
-		sprite.setPosition(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2);
-
 		sprite.draw(batch);
 		batch.end();
 	}
