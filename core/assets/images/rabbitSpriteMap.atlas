@@ -1,0 +1,27 @@
+
+rabbitSpriteMap.png
+size: 1024,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+rabbitJump
+  rotate: false
+  xy: 2, 2
+  size: 240, 174
+  orig: 240, 174
+  offset: 0, 0
+  index: -1
+rabbitStand
+  rotate: false
+  xy: 244, 2
+  size: 240, 174
+  orig: 240, 174
+  offset: 0, 0
+  index: -1
+rabbitWalk
+  rotate: false
+  xy: 486, 2
+  size: 240, 174
+  orig: 240, 174
+  offset: 0, 0
+  index: -1

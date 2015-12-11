@@ -15,17 +15,15 @@ import com.badlogic.gdx.utils.Timer;
 
 public class JacksGame implements ApplicationListener {
 	SpriteBatch batch;
-	Texture texture;
-	Sprite sprite;
-	Pixmap pixmap;
 	TextureAtlas textureAtlas;
+	Sprite sprite;
 	int currentFrame = 1;
 	String currentAtlasKey = new String("0001");
 	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
-		textureAtlas = new TextureAtlas(Gdx.files.internal("assets/images/spritesheet.atlas"));
+		textureAtlas = new TextureAtlas(Gdx.files.internal("data/spritesheet.atlas"));
 		TextureAtlas.AtlasRegion region = textureAtlas.findRegion("0001");
 		sprite = new Sprite(region);
 		sprite.setPosition(120, 100);
