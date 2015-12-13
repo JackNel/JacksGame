@@ -38,20 +38,14 @@ public class JacksGame implements ApplicationListener {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-			if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
-				sprite.translateX(-1f);
-			else
-				sprite.translateX(-10.0f);
+		if(Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+			sprite.setPosition(Gdx.input.getX() - sprite.getWidth()/2,
+					Gdx.graphics.getHeight() - Gdx.input.getY() - sprite.getHeight()/2);
 		}
-
-		if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-			if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT))
-				sprite.translateX(1f);
-			else
-				sprite.translateX(10.0f);
+		if(Gdx.input.isButtonPressed(Input.Buttons.RIGHT)) {
+			sprite.setPosition(Gdx.graphics.getWidth()/2 - sprite.getWidth()/2,
+					Gdx.graphics.getHeight()/2 - sprite.getHeight()/2);
 		}
-
 		batch.begin();
 		sprite.draw(batch);
 		batch.end();
