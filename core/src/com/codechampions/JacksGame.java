@@ -12,41 +12,65 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class JacksGame implements ApplicationListener, GestureDetector.GestureListener {
-	OrthographicCamera camera;
+public class JacksGame implements ApplicationListener, InputProcessor {
 	SpriteBatch batch;
-	Texture texture;
-	Sprite sprite;
+	TextureAtlas textureAtlas;
+	Animation rotateUpAnimation;
+	Animation rotateDownAnimation;
+	float elapsedTime = 0;
 
 	@Override
 	public void create() {
-		camera = new OrthographicCamera(1280, 720);
 		batch = new SpriteBatch();
+		textureAtlas = new TextureAtlas(Gdx.files.internal("data/spritesheet.atlas"));
 
-		texture = new Texture(Gdx.files.internal("data/Toronto2048wide.jpg"));
-		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+		TextureRegion[] rotateUpFrames = new TextureRegion[10];
 
-		sprite = new Sprite(texture);
-		sprite.setOrigin(0, 0);
-		sprite.setPosition(-sprite.getWidth() / 2, -sprite.getHeight() / 2);
+		rotateUpFrames[0] = (textureAtlas.findRegion("0001"));
+		rotateUpFrames[1] = (textureAtlas.findRegion("0002"));
+		rotateUpFrames[2] = (textureAtlas.findRegion("0003"));
+		rotateUpFrames[3] = (textureAtlas.findRegion("0004"));
+		rotateUpFrames[4] = (textureAtlas.findRegion("0005"));
+		rotateUpFrames[5] = (textureAtlas.findRegion("0006"));
+		rotateUpFrames[6] = (textureAtlas.findRegion("0007"));
+		rotateUpFrames[7] = (textureAtlas.findRegion("0008"));
+		rotateUpFrames[8] = (textureAtlas.findRegion("0009"));
+		rotateUpFrames[9] = (textureAtlas.findRegion("0010"));
 
-		Gdx.input.setInputProcessor(new GestureDetector(this));
+		rotateUpAnimation = new Animation(0.1f, rotateUpFrames);
+
+		rotateDownAnimation = new Animation(0.1f,
+				(textureAtlas.findRegion("0011")),
+				(textureAtlas.findRegion("0012")),
+				(textureAtlas.findRegion("0013")),
+				(textureAtlas.findRegion("0014")),
+				(textureAtlas.findRegion("0015")),
+				(textureAtlas.findRegion("0016")),
+				(textureAtlas.findRegion("0017")),
+				(textureAtlas.findRegion("0018")),
+				(textureAtlas.findRegion("0019")),
+				(textureAtlas.findRegion("0020")));
+
+		Gdx.input.setInputProcessor(this);
+
+
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
-		texture.dispose();
+		textureAtlas.dispose();
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(1, 1, 1, 1);
+		Gdx.gl.glClearColor(0, 0, 0, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		sprite.draw(batch);
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		batch.draw(rotateUpAnimation.getKeyFrame(elapsedTime, true), 0, 0);
+		batch.draw(rotateDownAnimation.getKeyFrame(elapsedTime, true), 0, 100);
 		batch.end();
 	}
 
@@ -64,44 +88,42 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 	}
 
 	@Override
-	public boolean touchDown(float x, float y, int pointer, int button) {
+	public boolean keyDown(int keycode) {
 		return false;
 	}
 
 	@Override
-	public boolean tap(float x, float y, int count, int button) {
+	public boolean keyUp(int keycode) {
 		return false;
 	}
 
 	@Override
-	public boolean longPress(float x, float y) {
+	public boolean keyTyped(char character) {
 		return false;
 	}
 
 	@Override
-	public boolean fling(float velocityX, float velocityY, int button) {
+	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		camera.translate(deltaX, 0);
-		camera.update();
+	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean panStop(float x, float y, int pointer, int button) {
+	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		return false;
 	}
 
 	@Override
-	public boolean zoom(float initialDistance, float distance) {
+	public boolean mouseMoved(int screenX, int screenY) {
 		return false;
 	}
 
 	@Override
-	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
+	public boolean scrolled(int amount) {
 		return false;
 	}
 }
