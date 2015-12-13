@@ -29,22 +29,24 @@ public class JacksGame implements ApplicationListener {
 		sprite.setPosition(120, 100);
 		sprite.scale(2.5f);
 		Timer.schedule(new Timer.Task() {
-			@Override
-			public void run() {
-				currentFrame++;
-				if(currentFrame > 20)
-					currentFrame = 1;
-				String base = new String();
-						if(currentFrame >= 10)
-							base = "00";
-						else
-							base = "000";
-				currentAtlasKey = base + currentFrame;
-				sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
-			}
-		}
-		,0,1/30.0f);
-			}
+						   @Override
+						   public void run() {
+							   currentFrame++;
+							   if (currentFrame > 20)
+								   currentFrame = 1;
+
+							   String base = new String();
+							   			if(currentFrame >= 10)
+											base = "00";
+							   			else
+											base = "000";
+							   currentAtlasKey = base + currentFrame;
+
+							   sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
+						   }
+					   }
+				, 0, 1 / 30.0f);
+	}
 
 	@Override
 	public void dispose() {
