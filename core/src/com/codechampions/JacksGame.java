@@ -14,63 +14,39 @@ import java.util.Map;
 
 public class JacksGame implements ApplicationListener, InputProcessor {
 	SpriteBatch batch;
-	TextureAtlas textureAtlas;
-	Animation rotateUpAnimation;
-	Animation rotateDownAnimation;
-	float elapsedTime = 0;
+	Texture texture;
+	Sprite sprite;
+	float posX, posY;
 
 	@Override
 	public void create() {
+		float w = Gdx.graphics.getWidth();
+		float h = Gdx.graphics.getHeight();
 		batch = new SpriteBatch();
-		textureAtlas = new TextureAtlas(Gdx.files.internal("data/spritesheet.atlas"));
 
-		TextureRegion[] rotateUpFrames = new TextureRegion[10];
-
-		rotateUpFrames[0] = (textureAtlas.findRegion("0001"));
-		rotateUpFrames[1] = (textureAtlas.findRegion("0002"));
-		rotateUpFrames[2] = (textureAtlas.findRegion("0003"));
-		rotateUpFrames[3] = (textureAtlas.findRegion("0004"));
-		rotateUpFrames[4] = (textureAtlas.findRegion("0005"));
-		rotateUpFrames[5] = (textureAtlas.findRegion("0006"));
-		rotateUpFrames[6] = (textureAtlas.findRegion("0007"));
-		rotateUpFrames[7] = (textureAtlas.findRegion("0008"));
-		rotateUpFrames[8] = (textureAtlas.findRegion("0009"));
-		rotateUpFrames[9] = (textureAtlas.findRegion("0010"));
-
-		rotateUpAnimation = new Animation(0.1f, rotateUpFrames);
-
-		rotateDownAnimation = new Animation(0.1f,
-				(textureAtlas.findRegion("0011")),
-				(textureAtlas.findRegion("0012")),
-				(textureAtlas.findRegion("0013")),
-				(textureAtlas.findRegion("0014")),
-				(textureAtlas.findRegion("0015")),
-				(textureAtlas.findRegion("0016")),
-				(textureAtlas.findRegion("0017")),
-				(textureAtlas.findRegion("0018")),
-				(textureAtlas.findRegion("0019")),
-				(textureAtlas.findRegion("0020")));
+		texture = new Texture(Gdx.files.internal("data/0001.png"));
+		sprite = new Sprite(texture);
+		posX = w/2 - sprite.getWidth()/2;
+		posY = h/2 - sprite.getHeight()/2;
+		sprite.setPosition(posX, posY);
 
 		Gdx.input.setInputProcessor(this);
-
-
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
-		textureAtlas.dispose();
+		texture.dispose();
 	}
 
 	@Override
 	public void render() {
-		Gdx.gl.glClearColor(0, 0, 0, 1);
+		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
+		sprite.setPosition(posX, posY);
 		batch.begin();
-		elapsedTime += Gdx.graphics.getDeltaTime();
-		batch.draw(rotateUpAnimation.getKeyFrame(elapsedTime, true), 0, 0);
-		batch.draw(rotateDownAnimation.getKeyFrame(elapsedTime, true), 0, 100);
+		sprite.draw(batch);
 		batch.end();
 	}
 
@@ -89,7 +65,15 @@ public class JacksGame implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean keyDown(int keycode) {
-		return false;
+		float moveAmount = 1.0f;
+		if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT));
+				moveAmount = 10.0f;
+
+		if(keycode == Input.Keys.LEFT)
+			posX = moveAmount;
+		if(keycode == Input.Keys.RIGHT)
+			posX += moveAmount;
+		return true;
 	}
 
 	@Override
@@ -104,6 +88,14 @@ public class JacksGame implements ApplicationListener, InputProcessor {
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+		if(button == Input.Buttons.LEFT) {
+			posX = screenX - sprite.getWidth()/2;
+			posY = Gdx.graphics.getHeight() - screenY - sprite.getHeight()/2;
+		}
+		if(button == Input.Buttons.RIGHT) {
+			posX = Gdx.graphics.getWidth()/2 - sprite.getWidth()/2;
+			posY = Gdx.graphics.getHeight()/2 - sprite.getHeight()/2;
+		}
 		return false;
 	}
 
