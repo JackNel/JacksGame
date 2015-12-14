@@ -33,8 +33,8 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 		final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/bossdeath.wav"));
 		Sound oggSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/error.ogg"));
 
-		long id = wavSound.play();
-		wavSound.setPitch(id, 0.5f);
+		long id = mp3Sound.play();
+		mp3Sound.setVolume(id, 1.0f);
 
 		sprite = new Sprite(texture);
 		sprite.setOrigin(0, 0);
