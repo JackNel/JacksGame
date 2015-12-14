@@ -1,6 +1,8 @@
 package com.codechampions;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.AudioDevice;
+import com.badlogic.gdx.audio.AudioRecorder;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -20,7 +22,6 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 	SpriteBatch batch;
 	Texture texture;
 	Sprite sprite;
-	Music mp3Music;
 
 
 	@Override
@@ -31,27 +32,26 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 		texture = new Texture(Gdx.files.internal("data/Toronto2048wide.jpg"));
 		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-		Music mp3Music = Gdx.audio.newMusic(Gdx.files.internal("soundFiles/14 Death Around The Corner.mp3"));
-
-		mp3Music.play();
-		mp3Music.setVolume(1.0f);
-		mp3Music.pause();
-		mp3Music.stop();
-		mp3Music.play();
-		Gdx.app.log("Song", Float.toString(mp3Music.getPosition()));
-
 		sprite = new Sprite(texture);
 		sprite.setOrigin(0, 0);
 		sprite.setPosition(- sprite.getWidth()/2, - sprite.getHeight()/2);
 
 		Gdx.input.setInputProcessor(new GestureDetector(this));
+
+		AudioDevice playbackDevice = Gdx.audio.newAudioDevice(44100, true);
+		AudioRecorder recordingDevice = Gdx.audio.newAudioRecorder(44100, true);
+		short[] samples = new short[44100 * 10]; //10 seconds mono audio
+		recordingDevice.read(samples, 0, samples.length);
+		playbackDevice.writeSamples(samples, 0, samples.length);
+		recordingDevice.dispose();
+		playbackDevice.dispose();
+
 	}
 
 	@Override
 	public void dispose() {
 		batch.dispose();
 		texture.dispose();
-		mp3Music.dispose();
 
 	}
 
