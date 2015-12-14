@@ -1,6 +1,7 @@
 package com.codechampions;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -25,6 +26,13 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 
 		texture = new Texture(Gdx.files.internal("data/Toronto2048wide.jpg"));
 		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+
+		Sound mp3Sound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/14 Death Around The Corner.mp3"));
+		Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/bossdeath.wav"));
+		Sound oggSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/error.ogg"));
+
+		oggSound.play();
+
 
 		sprite = new Sprite(texture);
 		sprite.setOrigin(0, 0);
