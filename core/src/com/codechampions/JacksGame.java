@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Timer;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,11 +28,17 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 		texture = new Texture(Gdx.files.internal("data/Toronto2048wide.jpg"));
 		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-		Sound mp3Sound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/14 Death Around The Corner.mp3"));
-		Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/bossdeath.wav"));
+		final Sound mp3Sound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/14 Death Around The Corner.mp3"));
+		final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/bossdeath.wav"));
 		Sound oggSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/error.ogg"));
 
-		oggSound.play();
+		final long id = wavSound.loop();
+		Timer.schedule(new Timer.Task() {
+			@Override
+			public void run() {
+				wavSound.stop(id);
+			}
+		}, 5.0f);
 
 
 		sprite = new Sprite(texture);
