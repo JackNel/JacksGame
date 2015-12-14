@@ -20,6 +20,7 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 	Texture texture;
 	Sprite sprite;
 
+
 	@Override
 	public void create() {
 		camera = new OrthographicCamera(1280, 720);
@@ -32,14 +33,8 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 		final Sound wavSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/bossdeath.wav"));
 		Sound oggSound = Gdx.audio.newSound(Gdx.files.internal("soundFiles/error.ogg"));
 
-		final long id = wavSound.loop();
-		Timer.schedule(new Timer.Task() {
-			@Override
-			public void run() {
-				wavSound.stop(id);
-			}
-		}, 5.0f);
-
+		long id = wavSound.play();
+		wavSound.setPitch(id, 0.5f);
 
 		sprite = new Sprite(texture);
 		sprite.setOrigin(0, 0);
@@ -52,6 +47,7 @@ public class JacksGame implements ApplicationListener, GestureDetector.GestureLi
 	public void dispose() {
 		batch.dispose();
 		texture.dispose();
+
 	}
 
 	@Override
