@@ -12,25 +12,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 
-public class JacksGame implements ApplicationListener, InputProcessor {
+public class JacksGame implements ApplicationListener, GestureDetector.GestureListener {
+	OrthographicCamera camera;
 	SpriteBatch batch;
 	Texture texture;
 	Sprite sprite;
-	float posX, posY;
 
 	@Override
 	public void create() {
-		float w = Gdx.graphics.getWidth();
-		float h = Gdx.graphics.getHeight();
+		camera = new OrthographicCamera(1280, 720);
 		batch = new SpriteBatch();
 
-		texture = new Texture(Gdx.files.internal("data/0001.png"));
-		sprite = new Sprite(texture);
-		posX = w/2 - sprite.getWidth()/2;
-		posY = h/2 - sprite.getHeight()/2;
-		sprite.setPosition(posX, posY);
+		texture = new Texture(Gdx.files.internal("data/Toronto2048wide.jpg"));
+		texture.setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
 
-		Gdx.input.setInputProcessor(this);
+		sprite = new Sprite(texture);
+		sprite.setOrigin(0, 0);
+		sprite.setPosition(- sprite.getWidth()/2, - sprite.getHeight()/2);
+
+		Gdx.input.setInputProcessor(new GestureDetector(this));
 	}
 
 	@Override
@@ -44,7 +44,7 @@ public class JacksGame implements ApplicationListener, InputProcessor {
 		Gdx.gl.glClearColor(1, 1, 1, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-		sprite.setPosition(posX, posY);
+		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		sprite.draw(batch);
 		batch.end();
@@ -64,58 +64,44 @@ public class JacksGame implements ApplicationListener, InputProcessor {
 	}
 
 	@Override
-	public boolean keyDown(int keycode) {
-		float moveAmount = 1.0f;
-		if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT));
-				moveAmount = 10.0f;
-
-		if(keycode == Input.Keys.LEFT)
-			posX = moveAmount;
-		if(keycode == Input.Keys.RIGHT)
-			posX += moveAmount;
-		return true;
-	}
-
-	@Override
-	public boolean keyUp(int keycode) {
+	public boolean touchDown(float x, float y, int pointer, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean keyTyped(char character) {
+	public boolean tap(float x, float y, int count, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		if(button == Input.Buttons.LEFT) {
-			posX = screenX - sprite.getWidth()/2;
-			posY = Gdx.graphics.getHeight() - screenY - sprite.getHeight()/2;
-		}
-		if(button == Input.Buttons.RIGHT) {
-			posX = Gdx.graphics.getWidth()/2 - sprite.getWidth()/2;
-			posY = Gdx.graphics.getHeight()/2 - sprite.getHeight()/2;
-		}
+	public boolean longPress(float x, float y) {
 		return false;
 	}
 
 	@Override
-	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+	public boolean fling(float velocityX, float velocityY, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean touchDragged(int screenX, int screenY, int pointer) {
+	public boolean pan(float x, float y, float deltaX, float deltaY) {
+		camera.translate(deltaX, 0);
+		camera.update();
 		return false;
 	}
 
 	@Override
-	public boolean mouseMoved(int screenX, int screenY) {
+	public boolean panStop(float x, float y, int pointer, int button) {
 		return false;
 	}
 
 	@Override
-	public boolean scrolled(int amount) {
+	public boolean zoom(float initialDistance, float distance) {
+		return false;
+	}
+
+	@Override
+	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2, Vector2 pointer1, Vector2 pointer2) {
 		return false;
 	}
 }
