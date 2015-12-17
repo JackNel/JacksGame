@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 import java.util.Iterator;
 
@@ -47,24 +48,7 @@ public class JacksGame implements ApplicationListener {
 
 		final MyActor myActor = new MyActor();
 
-		SequenceAction sequenceAction = new SequenceAction();
-
-		MoveToAction moveAction = new MoveToAction();
-		RotateToAction rotateAction = new RotateToAction();
-		ScaleToAction scaleAction = new ScaleToAction();
-
-		moveAction.setPosition(300f, 0f);  //This is where the jet will move to.
-		moveAction.setDuration(5f); //this is how long it will take to get there
-		rotateAction.setRotation(90f);
-		rotateAction.setDuration(5f);
-		scaleAction.setScale(0.5f);
-		scaleAction.setDuration(5f);
-
-		sequenceAction.addAction(scaleAction);  //this assigns the action to the actor
-		sequenceAction.addAction(rotateAction);
-		sequenceAction.addAction(moveAction);
-
-		myActor.addAction(sequenceAction);
+		myActor.addAction(sequence(scaleTo(0.5f, 0.5f, 5f), rotateTo(90.0f, 5f), moveTo(300.0f, 0f, 5f)));
 
 		stage.addActor(myActor);
 	}
