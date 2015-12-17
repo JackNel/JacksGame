@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
+import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
 
 import java.util.Iterator;
 
@@ -44,7 +45,9 @@ public class JacksGame implements ApplicationListener {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 
-		MyActor myActor = new MyActor();
+		final MyActor myActor = new MyActor();
+
+		SequenceAction sequenceAction = new SequenceAction();
 
 		MoveToAction moveAction = new MoveToAction();
 		RotateToAction rotateAction = new RotateToAction();
@@ -57,9 +60,11 @@ public class JacksGame implements ApplicationListener {
 		scaleAction.setScale(0.5f);
 		scaleAction.setDuration(5f);
 
-		myActor.addAction(moveAction);  //this assigns the action to the actor
-		myActor.addAction(rotateAction);
-		myActor.addAction(scaleAction);
+		sequenceAction.addAction(scaleAction);  //this assigns the action to the actor
+		sequenceAction.addAction(rotateAction);
+		sequenceAction.addAction(moveAction);
+
+		myActor.addAction(sequenceAction);
 
 		stage.addActor(myActor);
 	}
