@@ -48,7 +48,7 @@ public class JacksGame implements ApplicationListener {
 
 		final MyActor myActor = new MyActor();
 
-		myActor.addAction(sequence(scaleTo(0.5f, 0.5f, 5f), rotateTo(90.0f, 5f), moveTo(300.0f, 0f, 5f)));
+		myActor.addAction(parallel(scaleTo(0.5f, 0.5f, 5f), rotateTo(90.0f, 5f), moveTo(300.0f, 0f, 5f)));
 
 		stage.addActor(myActor);
 	}
