@@ -59,7 +59,13 @@ public class JacksGame implements ApplicationListener {
 		moveAction.setDuration(5f);
 		moveAction.setPosition(300f, 0);
 
-		myActor.addAction(moveAction);
+		myActor.addAction(sequence(moveAction,
+				run(new Runnable() {
+					@Override
+					public void run() {
+						Gdx.app.log("STATUS", "Action complete");
+					}
+		})));
 
 		stage.addActor(myActor);
 	}
