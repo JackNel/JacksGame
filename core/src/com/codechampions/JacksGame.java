@@ -9,6 +9,8 @@ import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.RotateToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.ScaleToAction;
 import com.badlogic.gdx.scenes.scene2d.actions.SequenceAction;
+import com.badlogic.gdx.utils.Pool;
+
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 import java.util.Iterator;
@@ -47,8 +49,17 @@ public class JacksGame implements ApplicationListener {
 		Gdx.input.setInputProcessor(stage);
 
 		final MyActor myActor = new MyActor();
+		Pool<MoveToAction> actionPool = new Pool<MoveToAction>() {
+			protected MoveToAction newObject() {
+				return new MoveToAction();
+			}
+		};
 
-		myActor.addAction(parallel(scaleTo(0.5f, 0.5f, 5f), rotateTo(90.0f, 5f), moveTo(300.0f, 0f, 5f)));
+		MoveToAction moveAction = actionPool.obtain();
+		moveAction.setDuration(5f);
+		moveAction.setPosition(300f, 0);
+
+		myActor.addAction(moveAction);
 
 		stage.addActor(myActor);
 	}
